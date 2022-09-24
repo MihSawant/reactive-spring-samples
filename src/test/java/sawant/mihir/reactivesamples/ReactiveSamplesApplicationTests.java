@@ -21,5 +21,15 @@ class ReactiveSamplesApplicationTests {
         StepVerifier.create(range).expectNextCount(5).verifyComplete();
     }
 
+    @Test
+    public void testLetters(){
+        // Create flux of three strings and verify them
+
+        Flux<String> letters = Flux.just("A", "B", "C");
+
+        StepVerifier.create(letters).expectNext("A", "B", "C").verifyComplete();
+    }
+
+
 
 }
