@@ -4,7 +4,12 @@ package sawant.mihir.reactivesamples;
 import org.junit.jupiter.api.Test;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 class ReactiveSamplesApplicationTests {
 
@@ -29,6 +34,16 @@ class ReactiveSamplesApplicationTests {
 
         StepVerifier.create(letters).expectNext("A", "B", "C").verifyComplete();
     }
+
+    @Test
+    public void testName(){
+      Mono<String> name = Mono.just("Mihir");
+
+      StepVerifier.create(name).expectNext("Mihir").verifyComplete();
+
+    }
+
+
 
 
 
