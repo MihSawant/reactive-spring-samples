@@ -10,6 +10,7 @@ import reactor.test.StepVerifier;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 class ReactiveSamplesApplicationTests {
 
@@ -41,6 +42,19 @@ class ReactiveSamplesApplicationTests {
 
       StepVerifier.create(name).expectNext("Mihir").verifyComplete();
 
+    }
+
+    @Test
+    public void streamTest(){
+        AtomicInteger integer  = new AtomicInteger();
+
+        Supplier<Integer> supplier = integer::incrementAndGet;
+
+        Flux<Integer> values = Flux.fromStream(Stream.generate(supplier));
+
+        // Its basically flux of many values wrapped inside a stream
+        StepVerifier.create(values).expectNext(1).expectNext(2)
+                .expectNext(3).expectComplete();
     }
 
 
