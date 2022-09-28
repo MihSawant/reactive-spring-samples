@@ -3,6 +3,7 @@ package sawant.mihir.reactivesamples;
 import org.junit.jupiter.api.Test;
 import org.reactivestreams.FlowAdapters;
 import org.reactivestreams.Publisher;
+import reactor.adapter.JdkFlowAdapter;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -17,5 +18,9 @@ public class FlowStreamTest {
         Publisher<Integer> publisher = FlowAdapters.toPublisher(integerPublisher);
 
         StepVerifier.create(publisher).expectNextCount(5).verifyComplete();
+
+        Flux<Integer> integerFlux = JdkFlowAdapter.flowPublisherToFlux(integerPublisher);
+
+        StepVerifier.create(integerFlux).expectNextCount(5).verifyComplete();
     }
 }
