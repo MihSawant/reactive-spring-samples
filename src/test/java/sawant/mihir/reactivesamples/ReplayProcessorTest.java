@@ -9,7 +9,7 @@ public class ReplayProcessorTest {
 
     @Test
     public void replayProcessor(){
-        int historySize = 2;
+        int historySize = 3;
         boolean unbounded = false;
 
         ReplayProcessor<String> replayProcessor =
@@ -23,6 +23,7 @@ public class ReplayProcessorTest {
 
 
             StepVerifier.create(replayProcessor)
+                        .expectNext("1")
                         .expectNext("2")
                         .expectNext("3")
                         .verifyComplete();
