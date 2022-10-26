@@ -1,8 +1,12 @@
 package sawant.mihir.reactivesamples;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
+import reactor.test.StepVerifier;
 
+import java.time.Duration;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class SchedulerExecutorServiceDecoratorTest {
@@ -11,19 +15,23 @@ public class SchedulerExecutorServiceDecoratorTest {
     public void before(){
         Schedulers.resetFactory();
 
-        Schedulers.addExecutorServiceDecorator("key-1", (scheduler, scheduledExecutorService) -> this.method(scheduledExecutorService));
+        Schedulers.addExecutorServiceDecorator("key-1",
+                (scheduler, scheduledExecutorService) -> this.decorateMethod(scheduledExecutorService));
     }
 
-    public ScheduledExecutorService method(ScheduledExecutorService service){
-        service.submit(() ->{
-            System.out.println("Hello World");
-        });
-        service.submit(() ->{
-           for(int i = 1; i <= 5; i++){
-               System.out.println("Task: "+i);
-           }
-        });
+    public ScheduledExecutorService decorateMethod(ScheduledExecutorService service){
+
         return service;
+    }
+
+
+    @Test
+    public void executeService(){
+      Flux<Integer> integerFlux = Flux.just(1, 2, 3, 4, 5)
+              .delayElements(Duration.ofSeconds(1));
+
+        StepVerifier.create(integerFlux).thenAwait(Duration.ofSeconds(5))
+                .expectNextCount(5).verifyComplete();
     }
 }
 
