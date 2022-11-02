@@ -16,22 +16,23 @@ public class SchedulerExecutorServiceDecoratorTest {
         Schedulers.resetFactory();
 
         Schedulers.addExecutorServiceDecorator("key-1",
-                (scheduler, scheduledExecutorService) -> this.decorateMethod(scheduledExecutorService));
+                (scheduler, scheduledExecutorService) ->
+                        this.decorateMethod(scheduledExecutorService));
     }
 
-    public ScheduledExecutorService decorateMethod(ScheduledExecutorService service){
 
+    public ScheduledExecutorService decorateMethod(ScheduledExecutorService service){
+        service.execute(()->{
+            System.out.println("Hello World");
+        });
         return service;
     }
 
-
     @Test
-    public void executeService(){
-      Flux<Integer> integerFlux = Flux.just(1, 2, 3, 4, 5)
-              .delayElements(Duration.ofSeconds(1));
+    public void sampleTest(){
 
-        StepVerifier.create(integerFlux).thenAwait(Duration.ofSeconds(5))
-                .expectNextCount(5).verifyComplete();
     }
+
+
 }
 
