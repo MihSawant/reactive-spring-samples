@@ -7,6 +7,7 @@ import reactor.core.scheduler.Schedulers;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class SchedulerExecutorServiceDecoratorTest {
@@ -15,9 +16,6 @@ public class SchedulerExecutorServiceDecoratorTest {
     public void before(){
         Schedulers.resetFactory();
 
-        Schedulers.addExecutorServiceDecorator("key-1",
-                (scheduler, scheduledExecutorService) ->
-                        this.decorateMethod(scheduledExecutorService));
     }
 
 
@@ -30,6 +28,9 @@ public class SchedulerExecutorServiceDecoratorTest {
 
     @Test
     public void sampleTest(){
+        Schedulers.addExecutorServiceDecorator("key-1",
+                (scheduler, scheduledExecutorService) ->
+                        this.decorateMethod(scheduledExecutorService));
 
     }
 
