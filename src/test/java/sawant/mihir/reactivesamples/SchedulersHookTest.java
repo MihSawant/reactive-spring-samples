@@ -26,17 +26,18 @@ public class SchedulersHookTest {
 
     @Test
     public void onScheduleWithError(){
+        var errorObj = new RuntimeException("Something went wrong");
         Schedulers.onSchedule(()->{
             for(int counter = 1;  counter <= 5; counter++){
                 System.out.println("Count = "+counter);
             }
         }).run();
 
-        var errorObj = new RuntimeException("Something went wrong");
 
         var errorPipeline = Flux.just("Pipe_1", "Pipe_2", "Pipe_3",
                         errorObj)
                 .delayElements(Duration.ofNanos(1))
+                .onErrorReturn("Something wrong !")
                 .doOnError((error)-> System.out.println(error.getMessage()))
                 .subscribeOn(Schedulers.immediate());
 
